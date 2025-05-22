@@ -40,7 +40,9 @@ public partial class BookingDatabaseContext : DbContext
 
             entity.ToTable("booking");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
             entity.Property(e => e.EndTime)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("end_time");
@@ -76,7 +78,9 @@ public partial class BookingDatabaseContext : DbContext
 
             entity.ToTable("booking_log");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
             entity.Property(e => e.Action)
                 .HasMaxLength(50)
                 .HasColumnName("action");
@@ -105,7 +109,9 @@ public partial class BookingDatabaseContext : DbContext
 
             entity.HasIndex(e => e.Name, "feature_name_key").IsUnique();
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
@@ -117,7 +123,9 @@ public partial class BookingDatabaseContext : DbContext
 
             entity.ToTable("notification");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
@@ -140,7 +148,9 @@ public partial class BookingDatabaseContext : DbContext
 
             entity.ToTable("recurring_booking");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
             entity.Property(e => e.EndDate).HasColumnName("end_date");
             entity.Property(e => e.Frequency)
                 .HasMaxLength(20)
@@ -167,7 +177,9 @@ public partial class BookingDatabaseContext : DbContext
 
             entity.HasIndex(e => e.Name, "role_name_key").IsUnique();
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
@@ -179,7 +191,9 @@ public partial class BookingDatabaseContext : DbContext
 
             entity.ToTable("room");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
             entity.Property(e => e.Capacity).HasColumnName("capacity");
             entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Name)
@@ -210,7 +224,9 @@ public partial class BookingDatabaseContext : DbContext
 
             entity.ToTable("room_schedule");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
             entity.Property(e => e.DayOfWeek).HasColumnName("day_of_week");
             entity.Property(e => e.EndTime).HasColumnName("end_time");
             entity.Property(e => e.RoomId).HasColumnName("room_id");
@@ -230,17 +246,47 @@ public partial class BookingDatabaseContext : DbContext
 
             entity.HasIndex(e => e.Email, "user_email_key").IsUnique();
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
+            entity.Property(e => e.Username)
+                .HasMaxLength(256)
+                .HasColumnName("username");
+            entity.Property(e => e.FirstName)
+                .HasMaxLength(100)
+                .HasColumnName("first_name");
+            entity.Property(e => e.SecondName)
+                .HasMaxLength(100)
+                .HasColumnName("second_name");
             entity.Property(e => e.Email)
-                .HasMaxLength(100)
+                .HasMaxLength(256)
                 .HasColumnName("email");
-            entity.Property(e => e.Name)
-                .HasMaxLength(100)
-                .HasColumnName("name");
-            entity.Property(e => e.Password)
+            entity.Property(e => e.EmailConfirmed)
+                .HasColumnName("email_confirmed");
+            entity.Property(e => e.PasswordHash)
                 .HasMaxLength(60)
                 .HasColumnName("password");
+            entity.Property(e => e.SecurityStamp)
+                .HasColumnName("security_stamp");
+            entity.Property(e => e.ConcurrencyStamp)
+                .HasColumnName("concurrency_stamp");
+            entity.Property(e => e.TwoFactorEnabled)
+                .HasColumnName("two_factor_enabled");
+            entity.Property(e => e.LockoutEnabled)
+                .HasColumnName("lockout_enabled");
+            entity.Property(e => e.LockoutEnd)
+                .HasColumnName("lockout_end");
+            entity.Property(e => e.AccessFailedCount)
+                .HasColumnName("access_failed_count");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnName("created_at");
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnName("updated_at");
             entity.Property(e => e.RoleId).HasColumnName("role_id");
+            entity.Property(e => e.IsDeleted)
+                .HasColumnName("is_deleted");
+            entity.Property(e => e.DeletedAt)
+                .HasColumnName("deleted_at");
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)

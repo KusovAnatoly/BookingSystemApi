@@ -5,11 +5,11 @@ namespace BookingSystemApi.Models;
 
 public partial class RecurringBooking
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public int? UserId { get; set; }
+    public Guid? UserId { get; set; }
 
-    public int? RoomId { get; set; }
+    public Guid? RoomId { get; set; }
 
     public string? Frequency { get; set; }
 

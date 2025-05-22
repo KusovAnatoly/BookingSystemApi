@@ -5,11 +5,11 @@ namespace BookingSystemApi.Models;
 
 public partial class BookingLog
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public int? BookingId { get; set; }
+    public Guid? BookingId { get; set; }
 
-    public int? ChangedBy { get; set; }
+    public Guid? ChangedBy { get; set; }
 
     public string? Action { get; set; }
 

@@ -5,9 +5,9 @@ namespace BookingSystemApi.Models;
 
 public partial class RoomSchedule
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
-    public int? RoomId { get; set; }
+    public Guid? RoomId { get; set; }
 
     public int? DayOfWeek { get; set; }
 
