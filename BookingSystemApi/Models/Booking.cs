@@ -7,7 +7,7 @@ public partial class Booking
 {
     public Guid Id { get; set; }
 
-    public Guid? UserId { get; set; }
+    public string? UserId { get; set; }
 
     public Guid? RoomId { get; set; }
 
@@ -17,7 +17,7 @@ public partial class Booking
 
     public string? Status { get; set; }
 
-    public int? RecurringId { get; set; }
+    public Guid? RecurringId { get; set; }
 
     public virtual ICollection<BookingLog> BookingLogs { get; set; } = new List<BookingLog>();
 

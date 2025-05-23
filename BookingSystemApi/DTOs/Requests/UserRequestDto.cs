@@ -2,37 +2,23 @@
 
 public class UserRequestDto
 {
-    public string Username { get; set; }
+    public string FirstName { get; set; } = null!;
 
-    public string FirstName { get; set; }
-
-    public string SecondName { get; set; }
+    public string SecondName { get; set; } = null!;
 
     public string Email { get; set; }
 
-    public bool EmailConfirmed { get; set; }
-
-    public string PasswordHash { get; set; }
-
-    public Guid SecurityStamp { get; set; }
+    public string UserName { get; set; }
     
-    public Guid ConcurrencyStamp  { get; set; }
+    public string Password { get; set; }
 
-    public bool TwoFactorEnabled { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public DateTime LockoutEnd { get; set; }
-
-    public bool LockoutEnabled { get; set; }
-
-    public int AccessFailedCount { get; set; }
-    
-    public DateTime CreatedAt { get; set; }
-    
     public DateTime? UpdatedAt { get; set; }
 
-    public RoleDto Role { get; set; }
+    public int RoleId { get; set; }
 
-    public bool IsDeleted { get; set; }
+    public bool IsDeleted { get; set; } = false;
 
     public DateTime? DeletedAt { get; set; }
 }

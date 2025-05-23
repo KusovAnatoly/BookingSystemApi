@@ -1,9 +1,10 @@
 ﻿using BookingSystemApi.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookingSystemApi.Data;
 
-public partial class BookingDatabaseContext : DbContext
+public partial class BookingDatabaseContext : IdentityDbContext<User>
 {
     public BookingDatabaseContext()
     {
@@ -24,8 +25,6 @@ public partial class BookingDatabaseContext : DbContext
 
     public virtual DbSet<RecurringBooking> RecurringBookings { get; set; }
 
-    public virtual DbSet<Role> Roles { get; set; }
-
     public virtual DbSet<Room> Rooms { get; set; }
 
     public virtual DbSet<RoomSchedule> RoomSchedules { get; set; }
@@ -34,6 +33,8 @@ public partial class BookingDatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+        
         modelBuilder.Entity<Booking>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("booking_pkey");
@@ -169,22 +170,6 @@ public partial class BookingDatabaseContext : DbContext
                 .HasConstraintName("recurring_booking_user_id_fkey");
         });
 
-        modelBuilder.Entity<Role>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("role_pkey");
-
-            entity.ToTable("role");
-
-            entity.HasIndex(e => e.Name, "role_name_key").IsUnique();
-
-            entity.Property(e => e.Id)
-                .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("id");
-            entity.Property(e => e.Name)
-                .HasMaxLength(50)
-                .HasColumnName("name");
-        });
-
         modelBuilder.Entity<Room>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("room_pkey");
@@ -213,8 +198,8 @@ public partial class BookingDatabaseContext : DbContext
                     {
                         j.HasKey("RoomId", "FeatureId").HasName("room_feature_pkey");
                         j.ToTable("room_feature");
-                        j.IndexerProperty<int>("RoomId").HasColumnName("room_id");
-                        j.IndexerProperty<int>("FeatureId").HasColumnName("feature_id");
+                        j.IndexerProperty<Guid>("RoomId").HasColumnName("room_id");
+                        j.IndexerProperty<Guid>("FeatureId").HasColumnName("feature_id");
                     });
         });
 
@@ -238,60 +223,60 @@ public partial class BookingDatabaseContext : DbContext
                 .HasConstraintName("room_schedule_room_id_fkey");
         });
 
-        modelBuilder.Entity<User>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("user_pkey");
-
-            entity.ToTable("user");
-
-            entity.HasIndex(e => e.Email, "user_email_key").IsUnique();
-
-            entity.Property(e => e.Id)
-                .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("id");
-            entity.Property(e => e.Username)
-                .HasMaxLength(256)
-                .HasColumnName("username");
-            entity.Property(e => e.FirstName)
-                .HasMaxLength(100)
-                .HasColumnName("first_name");
-            entity.Property(e => e.SecondName)
-                .HasMaxLength(100)
-                .HasColumnName("second_name");
-            entity.Property(e => e.Email)
-                .HasMaxLength(256)
-                .HasColumnName("email");
-            entity.Property(e => e.EmailConfirmed)
-                .HasColumnName("email_confirmed");
-            entity.Property(e => e.PasswordHash)
-                .HasMaxLength(60)
-                .HasColumnName("password");
-            entity.Property(e => e.SecurityStamp)
-                .HasColumnName("security_stamp");
-            entity.Property(e => e.ConcurrencyStamp)
-                .HasColumnName("concurrency_stamp");
-            entity.Property(e => e.TwoFactorEnabled)
-                .HasColumnName("two_factor_enabled");
-            entity.Property(e => e.LockoutEnabled)
-                .HasColumnName("lockout_enabled");
-            entity.Property(e => e.LockoutEnd)
-                .HasColumnName("lockout_end");
-            entity.Property(e => e.AccessFailedCount)
-                .HasColumnName("access_failed_count");
-            entity.Property(e => e.CreatedAt)
-                .HasColumnName("created_at");
-            entity.Property(e => e.UpdatedAt)
-                .HasColumnName("updated_at");
-            entity.Property(e => e.RoleId).HasColumnName("role_id");
-            entity.Property(e => e.IsDeleted)
-                .HasColumnName("is_deleted");
-            entity.Property(e => e.DeletedAt)
-                .HasColumnName("deleted_at");
-
-            entity.HasOne(d => d.Role).WithMany(p => p.Users)
-                .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("user_role_id_fkey");
-        });
+        // modelBuilder.Entity<User>(entity =>
+        // {
+        //     entity.HasKey(e => e.Id).HasName("user_pkey");
+        //
+        //     entity.ToTable("user");
+        //
+        //     entity.HasIndex(e => e.Email, "user_email_key").IsUnique();
+        //
+        //     entity.Property(e => e.Id)
+        //         .HasDefaultValueSql("gen_random_uuid()")
+        //         .HasColumnName("id");
+        //     entity.Property(e => e.Username)
+        //         .HasMaxLength(256)
+        //         .HasColumnName("username");
+        //     entity.Property(e => e.FirstName)
+        //         .HasMaxLength(100)
+        //         .HasColumnName("first_name");
+        //     entity.Property(e => e.SecondName)
+        //         .HasMaxLength(100)
+        //         .HasColumnName("second_name");
+        //     entity.Property(e => e.Email)
+        //         .HasMaxLength(256)
+        //         .HasColumnName("email");
+        //     entity.Property(e => e.EmailConfirmed)
+        //         .HasColumnName("email_confirmed");
+        //     entity.Property(e => e.PasswordHash)
+        //         .HasMaxLength(60)
+        //         .HasColumnName("password");
+        //     entity.Property(e => e.SecurityStamp)
+        //         .HasColumnName("security_stamp");
+        //     entity.Property(e => e.ConcurrencyStamp)
+        //         .HasColumnName("concurrency_stamp");
+        //     entity.Property(e => e.TwoFactorEnabled)
+        //         .HasColumnName("two_factor_enabled");
+        //     entity.Property(e => e.LockoutEnabled)
+        //         .HasColumnName("lockout_enabled");
+        //     entity.Property(e => e.LockoutEnd)
+        //         .HasColumnName("lockout_end");
+        //     entity.Property(e => e.AccessFailedCount)
+        //         .HasColumnName("access_failed_count");
+        //     entity.Property(e => e.CreatedAt)
+        //         .HasColumnName("created_at");
+        //     entity.Property(e => e.UpdatedAt)
+        //         .HasColumnName("updated_at");
+        //     entity.Property(e => e.RoleId).HasColumnName("role_id");
+        //     entity.Property(e => e.IsDeleted)
+        //         .HasColumnName("is_deleted");
+        //     entity.Property(e => e.DeletedAt)
+        //         .HasColumnName("deleted_at");
+        //
+        //     entity.HasOne(d => d.Role).WithMany(p => p.Users)
+        //         .HasForeignKey(d => d.RoleId)
+        //         .HasConstraintName("user_role_id_fkey");
+        // });
 
         OnModelCreatingPartial(modelBuilder);
     }

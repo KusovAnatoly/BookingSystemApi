@@ -9,7 +9,7 @@ public partial class BookingLog
 
     public Guid? BookingId { get; set; }
 
-    public Guid? ChangedBy { get; set; }
+    public string? ChangedBy { get; set; }
 
     public string? Action { get; set; }
 
